@@ -27,7 +27,7 @@ If you want to use the chime then you need to wire up the BeagleBone like this:
 
 And arrange for the `BeagleBone/startup/gpio60.sh` script to run at startup.
 
-Also create a file `/home/receiver/log.csv` and use chmod to make it writeable from anyone. This is the log file and it can be viewed by browsing to `<your BeagleBone>/printlog.php`. You should see something like this:
+Also create a file `/home/receiver/log.csv` and use chmod to make it writeable from anyone. This is the log file and it can be viewed by browsing to `http://<your BeagleBone>/printlog.php`. You should see something like this:
 
 ![Sample log](log-image.png)
 
@@ -38,5 +38,7 @@ To get the log showing the right names for the devices you need to edit the prin
 `$sources = array("test" => "123","pond" => "16058556","backdoor" => "8442031", "mailbox" => "8425573");`
 
 The values it is mapping against are the unique id of each ESP8266 obtained from the `ESP.getChipId()` call. If there is no mapping value the unmapped value appears in the log.
+
+The same thing appears in the processevent.php file where the message source name is used to decide hether to sound the chime or not. You can customise this as needed.
 
 To log the time properly you must ensure the BeagleBone's clock is set correctly. there is help on how to do this [here](http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/) however I had to use usr/sbin/ntp rather than usr/bin/ntp on my system.
