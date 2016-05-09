@@ -18,30 +18,30 @@
   text-decoration: none;
 }
 .table {
-	display: table;
+        display: table;
   border-top: 1px solid #CCCCCC;
   border-right: 1px solid #333333;
   border-bottom: 1px solid #333333;
   border-left: 1px solid #CCCCCC;
 }
 .td {
-	display: table-cell;
-	padding-right:10px;
-	padding-left: 10px;
+        display: table-cell;
+        padding-right:10px;
+        padding-left: 10px;
 }
 .tdc {
         display: table-cell;
         padding-right:10px;
-	padding-left: 10px;
-	color: red;
+        padding-left: 10px;
+        color: red;
 }
 
 .tr {
-	display: table-row;
+        display: table-row;
 }
 .tr:nth-child(odd){
-	background-color: #eee;
+        background-color: #eee;
 }
 .tr:nth-child(even){
-	background-color: #fff;
+        background-color: #fff;
 }

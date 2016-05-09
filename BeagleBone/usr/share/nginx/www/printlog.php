@@ -16,41 +16,40 @@ $data = [];
 echo "<h1>Log</h1>". PHP_EOL;
 echo "<div class=\"table\">";
 while(!feof($csvFile)) {
-	$line =fgetcsv($csvFile,1024);
-	if ($line[0] != "") {
-	echo "<div class=\"tr\">";
-		echo "<div class=\"td\">";
-		$n = array_search($line[0],$sources);
-		if ($n == "") {
-			echo $line[0];
-		} else {
-			echo $n;	
-		}
-		//ecoo array_search($line[0],$sources);
-		echo "</div>";
+        $line =fgetcsv($csvFile,1024);
+        if ($line[0] != "") {
+        echo "<div class=\"tr\">";
                 echo "<div class=\"td\">";
-		$d = intval($line[1]);
-		$date = new DateTime();
-		$date->setTimestamp($d);
-		echo $date->format("Y-M-d H:i:s");
+                $n = array_search($line[0],$sources);
+                if ($n == "") {
+                        echo $line[0];
+                } else {
+                        echo $n;
+                }
+                echo "</div>";
+                echo "<div class=\"td\">";
+                $d = intval($line[1]);
+                $date = new DateTime();
+                $date->setTimestamp($d);
+                echo $date->format("Y-M-d H:i:s");
                 echo "</div>";
                 echo "<div class=\"td\">";
                 echo array_search($line[2],$types);
                 echo "</div>";
-		if ($line[2] == "1") {
-			if ($line[3] < "3000") { 
-                		echo "<div class=\"tdc\">";
-			} else {
-				echo "<div class=\"td\">";
-			}
-               		echo $line[3];
-                	echo "</div>";
-		}
-		if ($line[2] > "1") {
-			// siren
-		}
-  	echo "</div>". PHP_EOL;
-	}
+                if ($line[2] == "6") {
+                        if ($line[3] < "3000") {
+                                echo "<div class=\"tdc\">";
+                        } else {
+                                echo "<div class=\"td\">";
+                        }
+                        echo $line[3];
+                        echo "</div>";
+                }
+                if ($line[2] > "1") {
+                        // siren
+                }
+        echo "</div>". PHP_EOL;
+        }
    }
 echo "</div>". PHP_EOL;
 echo "<div class=\"buttons\">";

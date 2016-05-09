@@ -1,23 +1,23 @@
 ESP8266-automation
 ==
 
-Code and circuitry to support simple event driven signaling from remote sensors (ESP8266) to a server (BeagleBone)
+Code and circuitry to support simple event driven signaling from remote sensors (ESP8266) to a server (BeagleBone). The remote sensors detect an n/c switch being closed and they send a message to the server which decides what to do with it. Normally it logs it and there is a web page to query the log. But for some messages it will sound a chime. The remote sensors also send a battery status every 24 hours.
 
-The remote sensors use an ESP8266-01 plus the PCB defined under the eagle directory. You can order the PCB from [oshpark directly](https://www.oshpark.com/shared_projects/7gWfLivJ) Use 3xAA batteries as the power supply and any convenient switch as the switch. A simple mercury switch is good. To extend battery life you can desolder the red LED on the ESP8266 board. It is better to use [4pin Female Single Row Straight Headers](http://www.aliexpress.com/item/50-pcs-4P-4pin-Female-Single-Row-Straight-Header-Strip-Socket-Connector-Pitch-2-54mm/32442780670.html) rather than solder the ESP8266 board to the PCB directly so you can detach it and reflash.
+The remote sensors use an ESP8266-01. Use 2xAA batteries as the power supply and any convenient switch as the switch. A simple mercury switch is good. A 3xAA battery case be slightly modified to hold just two AA batteries plus the ESP8266. 
 
-There are two images to flash to the ESP8266. They both do the following:
+Wiring is very simple:
 
- * Detect when GPIO0 grounded and send a message to the server with an event.
- * Detect when the voltage falls below 3v and send a battery status message.
- * Send a battery status message on startup.
- 
-The server is a Beaglebone running Nginx with some PHP scripts. The difference between the two images is that the GPIO0 ground message is slightly different and invokes a different script. One tells the server to just log, the other (Mailbox) tells the server to sound a chime as well.
+![Remote Sensor Wiring](wiring.png)
 
-To compile the two flash images you need to have the Arduino environment installed. Then you need to edit the file local_network.h to include your own settings and copy it to:
+This can be easily done soldering the components directly to the ESP8266 terminals. You do not need a PCB or perfboard support. There is one tricky part and that is the connection to XPD (or GPIO16) which is a tiny contact on the side of the chip, not an exposed pin unfortunately. [This page will show you where it is](http://tim.jagenberg.info/2015/01/18/low-power-esp8266/). It is probably worth prying off the red LED on the ESP8266 board too because that uses up battery unnecessarily.
+
+Flash the RemoteSwitch image tothe ESP8266. To compile it you need to have the Arduino environment installed. Then you need to edit the file local_network.h to include your own settings and copy it to:
 
 `~/.arduino15/packages/esp8266/hardware/esp8266/2.0.0/tools/sdk/include`
 
 For details on flashing the ESP8266 from an Arduino environment see [this link](http://iot-playground.com/blog/2-uncategorised/38-esp8266-and-arduino-ide-blink-example).
+ 
+The server is a Beaglebone running Nginx with some PHP scripts.
 
 To set up the BeagleBone just install [Nginx](https://www.nginx.com/resources/wiki/start/topics/tutorials/install/#) and copy the php scripts into `/usr/share/nginx/www`
 
