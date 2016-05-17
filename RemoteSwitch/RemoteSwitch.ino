@@ -1,11 +1,11 @@
 /*
- * Possum Trap remote sensor
+ * Remote Switch
  * Copyright (c) 2016 Roger Parkinson
  * 
- * This sends a generic message to the server if the n/o switch is closed.
- * It also wakes every 24 hours to send another generic message.
+ * This sends a generic message over WIFI to the server if the n/o switch is closed.
+ * It sends a battery status messageon startup.
  * Both messages always have the id of the current chip, the type of boot and the battery level.
- * The type of boot changes depending on whether it was from the daily timeout or the n/o switch
+ * The type of boot changes depending on whether it was from the startup or the n/o switch
  * closing. We light up the blue LED while transmitting. 
  * 
  * Note that to compile you need to edit local_network.h  and add it to this directory: 
@@ -22,8 +22,9 @@ extern "C" {
 #include <user_interface.h>
 }
 
+#define SLEEP_TIME 0
 //#define SLEEP_TIME 1000000 * 20 // 20 seconds
-#define SLEEP_TIME 1000000 * 86400 // 1 day
+//#define SLEEP_TIME 1000000 * 86400 // 1 day
 
 char myid[15];
 // WiFi information
@@ -75,6 +76,7 @@ void setup()
   Serial.begin(115200);
   pinMode(BUILTIN_LED, OUTPUT);
   sprintf(myid,"%ld",ESP.getChipId());
+  WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
