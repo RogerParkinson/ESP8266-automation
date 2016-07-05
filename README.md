@@ -1,22 +1,36 @@
 ESP8266-automation
 ==
 
-Code and circuitry to support simple event driven signaling from remote sensors (ESP8266) to a server (BeagleBone). The remote sensors detect an n/c switch being closed and they send a message to the server which decides what to do with it. Normally it logs it and there is a web page to query the log. But for some messages it will sound a chime. The remote sensors also send a battery status every 24 hours.
+Code and circuitry to support simple event driven signaling from remote sensors (ESP8266) to a server (BeagleBone). The remote sensors detect an n/c switch being closed and they send a message to the server which decides what to do with it. Normally it logs it and there is a web page to query the log. But for some messages it will sound a chime. The remote sensors also send a battery status when they power up.
 
-The remote sensors use an ESP8266-01. Use 2xAA batteries as the power supply and any convenient switch as the switch. A simple mercury switch is good. A 3xAA battery case be slightly modified to hold just two AA batteries plus the ESP8266. 
+Remote Switch
+=
 
-Wiring is very simple:
+The remote sensors use an ESP8266-01. Use 2xAA batteries as the power supply and any convenient switch as the switch. A simple mercury switch is good. A 3xAA battery case be slightly modified to hold just two AA batteries plus the ESP8266. The thing that looks like an LED is the mercury switch.
 
-![Remote Sensor Wiring](wiring.png)
+![Battery Case](BatteryCase.jpg)
 
-This can be easily done soldering the components directly to the ESP8266 terminals. You do not need a PCB or perfboard support. There is one tricky part and that is the connection to XPD (or GPIO16) which is a tiny contact on the side of the chip, not an exposed pin unfortunately. [This page will show you where it is](http://tim.jagenberg.info/2015/01/18/low-power-esp8266/). It is probably worth prying off the red LED on the ESP8266 board too because that uses up battery unnecessarily.
+This shows the boards more clearly. The ESP8266-01 is soldered onto the project board which is, in turn, connected to the batteries.
 
-Flash the RemoteSwitch image tothe ESP8266. To compile it you need to have the Arduino environment installed. Then you need to edit the file local_network.h to include your own settings and copy it to:
+![Boards](Boards.jpg)
+
+The project board is defined in the Eagle files under the ESP8266TX directory. This board supports flashing the ESP8266-01 so you can solder the two boards together and know you can still change the code running on the ESP. There are connectors on the board for VCC and GND as well as two for the Switch (eg the mercury switch). This switch earths the CH_PD pin on the ESP which will wake it from deep sleep.
+
+There are also pins relating to flashing. The FTDI I use is the [Basic FTDI from Sparkfun](https://www.sparkfun.com/products/9873) but any FTDI should work as long as it uses DTR the same way, ie grounds it just before it starts. Also it *must* be a 3v FTDI or you will fry your ESP8266. To flash the ESP just plug in the FTDI, make sure it is the right way around and I have marked GND on one end to help, and put jumpers on the JPVCC and GPIO0 pins. I use [these jumpers](http://www.aliexpress.com/item/100pcs-2-54mm-Jumper-Cap-Mini-Jumper-Short-Circuit-Cap-Connection-2-54mm/32514701340.html?spm=2114.13010608.0.97.stW9wL).
+
+You can order the board from [OSH Park](<a href="https://www.oshpark.com/shared_projects/lX2y24Ii"><img src="https://www.oshpark.com/assets/badge-5b7ec47045b78aef6eb9d83b3bac6b1920de805e9a0c227658eac6e19a045b9c.png" alt="Order from OSH Park"></img></a>) (3 for under $3).
+
+It is worth while removing the red LED from the ESP because it runs all the time and reduces battery life. Just grab it with some small pliers and pull.
+
+Flash the RemoteSwitch image to the ESP8266. To compile it you need to have the Arduino environment installed. Then you need to edit the file local_network.h to include your own settings and copy it to:
 
 `~/.arduino15/packages/esp8266/hardware/esp8266/2.0.0/tools/sdk/include`
 
 For details on flashing the ESP8266 from an Arduino environment see [this link](http://iot-playground.com/blog/2-uncategorised/38-esp8266-and-arduino-ide-blink-example).
- 
+
+BeagleBone
+=
+
 The server is a Beaglebone running Nginx with some PHP scripts.
 
 To set up the BeagleBone just install [Nginx](https://www.nginx.com/resources/wiki/start/topics/tutorials/install/#) and copy the php scripts into `/usr/share/nginx/www`
@@ -31,7 +45,7 @@ Also create a file `/home/receiver/log.csv` and use chmod to make it writeable f
 
 ![Sample log](log-image.png)
 
-This shows mostly battery levels logged at startup, but the send entry shows the value in red, indicating it has dropped below 3000. The last entry is an actual event on the mailbox and was used to test the chime.
+This shows mostly battery levels logged at startup, but the second entry shows the value in red, indicating it has dropped below 3000. The last entry is an actual event on the mailbox and was used to test the chime.
 
 To get the log showing the right names for the devices you need to edit the printlog.php file. Specifically this line:
 

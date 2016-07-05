@@ -73,9 +73,12 @@ void setup()
 {
   rst_info *resetInfoPtr;
   resetInfoPtr = ESP.getResetInfoPtr();
-  Serial.begin(115200);
+//  Serial.begin(115200);
+  delay(500);
+//  Serial.println("Starting");
   pinMode(BUILTIN_LED, OUTPUT);
   sprintf(myid,"%ld",ESP.getChipId());
+//  Serial.println(myid);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
 
@@ -91,6 +94,11 @@ void setup()
 
 void loop()
 {
-
+  // we never actually get here because of the ESP.deepSleep
+//  Serial.println("loop");
+  digitalWrite(BUILTIN_LED, LOW);
+  delay(2000);
+  digitalWrite(BUILTIN_LED, HIGH);
+  delay(2000);
 }
 
