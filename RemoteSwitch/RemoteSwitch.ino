@@ -8,15 +8,22 @@
  * The type of boot changes depending on whether it was from the startup or the n/o switch
  * closing. We light up the blue LED while transmitting. 
  * 
- * Note that to compile you need to edit local_network.h  and add it to this directory: 
- * ~/.arduino15/packages/esp8266/hardware/esp8266/2.0.0/tools/sdk/include
+ * Note that to compile you need to create a file named local_network.h" in the current directory
+ * Contents:
+ * #ifndef local_network_h
+ * #define local_network_h
+ * #define local_network_SSID "YOUR_SSID"
+ * #define local_network_PASSWORD "YOUR_NETWORK_PASSWORD"
+ * #define local_network__HOST "YOUR_HOST_IP_ADDRESS"
+ * #define local_network__PORT 80
+ * #endif
  * 
- * Runs fine on 2xAA batteries delivering just over 3v.
+ * Runs fine on 3xAA batteries delivering just over 4v.
  */
 
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
-#include <local_network.h>
+#include "local_network.h"
 
 extern "C" {
 #include <user_interface.h>

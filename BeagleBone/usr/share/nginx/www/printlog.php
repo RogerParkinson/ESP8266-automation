@@ -1,7 +1,8 @@
 <?php
 
-$types = array("event" => "0", "battery" => "1", "mailbox" => "2", "driveway" => "3", "gate" => "4");
-$sources = array("test" => "123","pond" => "16058556","backdoor" => "8442031", "mailbox" => "8425573");
+$types = array("event" => "0", "battery" => "6", "mailbox" => "2", "driveway" => "3", "gate" => "4");
+
+$sources = array("test" => "123","pond" => "16058556","backdoor" => "8442031", "mailbox" => "8442631", "citrus" => "8438153", "feijoa" => "8426023", "persimmon" => "8439939", "orchard" => "8440401", "gate" => "823195");
 
 echo "<html>";
 echo "<head>";
@@ -14,6 +15,10 @@ $csvFile = fopen("/home/receiver/log.csv", "r");
 $data = [];
 
 echo "<h1>Log</h1>". PHP_EOL;
+$ddate = new DateTime();
+echo "<p>";
+echo $ddate->format("Y-M-d H:i:s");
+echo "</p>";
 echo "<div class=\"table\">";
 while(!feof($csvFile)) {
         $line =fgetcsv($csvFile,1024);
@@ -33,10 +38,10 @@ while(!feof($csvFile)) {
                 $date->setTimestamp($d);
                 echo $date->format("Y-M-d H:i:s");
                 echo "</div>";
-                echo "<div class=\"td\">";
-                echo array_search($line[2],$types);
-                echo "</div>";
-                if ($line[2] == "6") {
+ //               echo "<div class=\"td\">";
+ //               echo array_search($line[2],$types);
+//                echo "</div>";
+//              if ($line[2] == "6") {
                         if ($line[3] < "3000") {
                                 echo "<div class=\"tdc\">";
                         } else {
@@ -44,7 +49,7 @@ while(!feof($csvFile)) {
                         }
                         echo $line[3];
                         echo "</div>";
-                }
+//              }
                 if ($line[2] > "1") {
                         // siren
                 }
@@ -55,10 +60,11 @@ echo "</div>". PHP_EOL;
 echo "<div class=\"buttons\">";
 echo "<a class=\"button\" href=\"printlog.php\">Refresh</a>";
 echo "<a class=\"button\" href=\"killlog.php\">Clear</a>";
+echo "<a class=\"button\" href=\"reboot.php\">Reboot</a>";
+echo "<a class=\"button\" href=\"siren.php?count=1&redirect=true\">Test</a>";
 echo "</div>". PHP_EOL;
 echo "</body>";
 echo "</html>";
 
 
 ?>
-
